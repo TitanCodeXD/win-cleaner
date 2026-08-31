@@ -1,127 +1,156 @@
 @echo off
-title Super Limpeza e Otimizacao (Modo Relatorio)
-color 0A
+title win-cleaner v1.0.0
+chcp 65001 >nul
 
-:: Verifica se esta rodando como Administrador
+:: Cores ANSI para a interface
+set "ESC="
+for /f %%A in ('echo prompt $E ^| cmd') do set "ESC=%%A"
+set "GREEN=%ESC%[92m"
+set "CYAN=%ESC%[36m"
+set "YELLOW=%ESC%[93m"
+set "RED=%ESC%[91m"
+set "GRAY=%ESC%[90m"
+set "RESET=%ESC%[0m"
+
+:: Código ANSI para mover o cursor para o início da linha anterior
+set "MOVE_UP=%ESC%[1A"
+
+:: Verifica permissao de Administrador
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo [ERRO] Voce PRECISA executar este script como Administrador!
-    echo Clique com o botao direito no arquivo e escolha 'Executar como Administrador'.
+    echo %RED%[ERRO] Este script precisa ser executado como Administrador!%RESET%
     pause
     exit
 )
 
-:: Captura o espaco livre ANTES da limpeza (via PowerShell)
+:: Captura espaco antes da limpeza
 for /f %%a in ('powershell -command "(Get-Volume -DriveLetter C).SizeRemaining"') do set "espaco_antes=%%a"
 
-echo ===================================================
-echo    INICIANDO A SUPER LIMPEZA (MODO RELATORIO)
-echo ===================================================
+echo %CYAN%===========================================================%RESET%
 echo.
-echo * Arquivos em uso exibirao 'Acesso negado', o que eh normal.
+echo    %GREEN% WIN-CLEANER :: Otimização do Sistema - made by Wesley%RESET%
 echo.
-pause
+echo %CYAN%===========================================================%RESET%
+echo.
+echo %GRAY%* Arquivos bloqueados pelo sistema serão ignorados automaticamente.%RESET%
+echo.
+echo.
+echo %YELLOW%Pressione qualquer tecla para iniciar a varredura...%RESET%
+pause >nul
+echo.
+echo %CYAN%---------------------------------------------------%RESET%
+echo.
 
-echo.
-echo ---------------------------------------------------
-echo [1/10] Limpando arquivos Temp do Usuario (%%temp%%)...
-echo ---------------------------------------------------
-del /q /f /s "%temp%\*.*"
-rmdir /s /q "%temp%"
-mkdir "%temp%"
+:: ---------------------------------------------------
+:: ETAPA 1
+:: ---------------------------------------------------
+echo %CYAN%Etapa 1 - Arquivos temporários%RESET%
+echo %YELLOW%[ WAIT ]%RESET% Limpando arquivos temporários...
 
-echo.
-echo ---------------------------------------------------
-echo [2/10] Limpando arquivos Temp do Sistema...
-echo ---------------------------------------------------
-del /q /f /s "C:\Windows\Temp\*.*"
-rmdir /s /q "C:\Windows\Temp"
-mkdir "C:\Windows\Temp"
-
-echo.
-echo ---------------------------------------------------
-echo [3/10] Limpando a pasta C:\Temp (Instaladores antigos)...
-echo ---------------------------------------------------
+del /q /f /s "%temp%\*.*" >nul 2>&1
+rmdir /s /q "%temp%" >nul 2>&1
+mkdir "%temp%" >nul 2>&1
+del /q /f /s "C:\Windows\Temp\*.*" >nul 2>&1
+rmdir /s /q "C:\Windows\Temp" >nul 2>&1
+mkdir "C:\Windows\Temp" >nul 2>&1
 if exist "C:\Temp" (
-    del /q /f /s "C:\Temp\*.*"
-    rmdir /s /q "C:\Temp"
-    mkdir "C:\Temp"
+    del /q /f /s "C:\Temp\*.*" >nul 2>&1
+    rmdir /s /q "C:\Temp" >nul 2>&1
+    mkdir "C:\Temp" >nul 2>&1
 )
+timeout /t 1 >nul 2>&1
 
+:: Move para cima e substitui o status na mesma linha
+echo %MOVE_UP%%GREEN%[  OK  ]%RESET% Arquivos temporários limpos.             
 echo.
-echo ---------------------------------------------------
-echo [4/10] Limpando o Cache do Spotify (Data e Storage)...
-echo ---------------------------------------------------
+
+:: ---------------------------------------------------
+:: ETAPA 2
+:: ---------------------------------------------------
+echo %CYAN%Etapa 2 - Cache de apps (Spotify/Node.js)%RESET%
+echo %YELLOW%[ WAIT ]%RESET% Limpando cache de aplicativos - Spotify/Node.js...
+
+:: Spotify Oficial
 if exist "%LocalAppData%\Spotify\Data" (
-    del /q /f /s "%LocalAppData%\Spotify\Data\*.*"
+    rmdir /s /q "%LocalAppData%\Spotify\Data" >nul 2>&1
+    mkdir "%LocalAppData%\Spotify\Data" >nul 2>&1
 )
 if exist "%LocalAppData%\Spotify\Storage" (
-    del /q /f /s "%LocalAppData%\Spotify\Storage\*.*"
+    rmdir /s /q "%LocalAppData%\Spotify\Storage" >nul 2>&1
+    mkdir "%LocalAppData%\Spotify\Storage" >nul 2>&1
 )
+:: Spotify Windows Store
 for /d %%i in ("%LocalAppData%\Packages\SpotifyAB.SpotifyMusic_*") do (
     if exist "%%i\LocalState\Spotify\Data" (
-        del /q /f /s "%%i\LocalState\Spotify\Data\*.*"
+        rmdir /s /q "%%i\LocalState\Spotify\Data" >nul 2>&1
+        mkdir "%%i\LocalState\Spotify\Data" >nul 2>&1
     )
     if exist "%%i\LocalState\Spotify\Storage" (
-        del /q /f /s "%%i\LocalState\Spotify\Storage\*.*"
+        rmdir /s /q "%%i\LocalState\Spotify\Storage" >nul 2>&1
+        mkdir "%%i\LocalState\Spotify\Storage" >nul 2>&1
     )
-)
-
-echo.
-echo ---------------------------------------------------
-echo [5/10] Limpando o npm-cache (Node.js)...
-echo ---------------------------------------------------
+) 2>nul
+:: Node Cache
 if exist "%AppData%\npm-cache" (
-    del /q /f /s "%AppData%\npm-cache\*.*"
-    rmdir /s /q "%AppData%\npm-cache"
+    del /q /f /s "%AppData%\npm-cache\*.*" >nul 2>&1
+    rmdir /s /q "%AppData%\npm-cache" >nul 2>&1
 )
+timeout /t 1 >nul 2>&1
 
+echo %MOVE_UP%%GREEN%[  OK  ]%RESET% Caches de aplicativos removidos com sucesso.
 echo.
-echo ---------------------------------------------------
-echo [6/10] Limpando arquivos do Prefetch...
-echo ---------------------------------------------------
-del /q /f /s "C:\Windows\Prefetch\*.*"
-rmdir /s /q "C:\Windows\Prefetch"
-mkdir "C:\Windows\Prefetch"
 
-echo.
-echo ---------------------------------------------------
-echo [7/10] Limpando o Cache de DNS...
-echo ---------------------------------------------------
-ipconfig /flushdns
+:: ---------------------------------------------------
+:: ETAPA 3
+:: ---------------------------------------------------
+echo %CYAN%Etapa 3 - Otimização de rede%RESET%
+echo %YELLOW%[ WAIT ]%RESET% Otimizando rede e logs do sistema...
 
-echo.
-echo ---------------------------------------------------
-echo [8/10] Limpando Arquivos de Log do Windows...
-echo ---------------------------------------------------
-del /q /f /s "C:\Windows\*.log"
+del /q /f /s "C:\Windows\Prefetch\*.*" >nul 2>&1
+rmdir /s /q "C:\Windows\Prefetch" >nul 2>&1
+mkdir "C:\Windows\Prefetch" >nul 2>&1
+ipconfig /flushdns >nul 2>&1
+del /q /f /s "C:\Windows\*.log" >nul 2>&1
+timeout /t 1 >nul 2>&1
 
+echo %MOVE_UP%%GREEN%[  OK  ]%RESET% DNS flush executado e logs antigos deletados.
 echo.
-echo ---------------------------------------------------
-echo [9/10] Esvaziando a Lixeira de TODOS os discos...
-echo ---------------------------------------------------
-powershell -Command "Clear-RecycleBin -Force -ErrorAction SilentlyContinue"
 
+:: ---------------------------------------------------
+:: ETAPA 4
+:: ---------------------------------------------------
+echo %CYAN%Etapa 4 - Limpando lixeiras%RESET%
+echo %YELLOW%[ WAIT ]%RESET% Esvaziando Lixeira do sistema...
+
+powershell -Command "Clear-RecycleBin -Force -ErrorAction SilentlyContinue" >nul 2>&1
+timeout /t 1 >nul 2>&1
+
+echo %MOVE_UP%%GREEN%[  OK  ]%RESET% Lixeira limpa de todos os discos.
 echo.
-echo ---------------------------------------------------
-echo [10/10] Limpando Cache do Windows Update...
-echo ---------------------------------------------------
+
+:: ---------------------------------------------------
+:: ETAPA 5
+:: ---------------------------------------------------
+echo %CYAN%Etapa 5 - Limpando cache de atualizações do windowns%RESET%
+echo %YELLOW%[ WAIT ]%RESET% Limpando cache de atualizações do Windows...
+
 net stop wuauserv >nul 2>&1
 net stop bits >nul 2>&1
-del /f /q /s "C:\Windows\SoftwareDistribution\Download\*.*"
-rmdir /s /q "C:\Windows\SoftwareDistribution\Download"
-mkdir "C:\Windows\SoftwareDistribution\Download"
+del /f /q /s "C:\Windows\SoftwareDistribution\Download\*.*" >nul 2>&1
+rmdir /s /q "C:\Windows\SoftwareDistribution\Download" >nul 2>&1
+mkdir "C:\Windows\SoftwareDistribution\Download" >nul 2>&1
 net start bits >nul 2>&1
 net start wuauserv >nul 2>&1
 
-echo.
-echo ===================================================
-echo    LIMPEZA CONCLUIDA! REVISE OS RESULTADOS ACIMA.
-echo ===================================================
+echo %MOVE_UP%%GREEN%[  OK  ]%RESET% Distribuição de software do Windows Update limpa.
 echo.
 
-:: Bloco do PowerShell em linha unica para evitar quebras e erros de sintaxe
-powershell -command "$antes = [int64]%espaco_antes%; $depois = (Get-Volume -DriveLetter C).SizeRemaining; $diff = $depois - $antes; if ($diff -le 0) { Write-Host 'Nenhum espaco significativo foi liberado desta vez.' -ForegroundColor Yellow } else { if ($diff -gt 1GB) { $total = '{0:N2} GB' -f ($diff / 1GB) } else { $total = '{0:N2} MB' -f ($diff / 1MB) }; Write-Host '>>> ESPACO TOTAL LIBERADO NO DISCO C: ' -NoNewline -ForegroundColor Green; Write-Host $total -ForegroundColor Cyan; }"
+echo %CYAN%===================================================%RESET%
+echo   %GREEN%ANÁLISE DE RESULTADOS%RESET%
+echo %CYAN%===================================================%RESET%
+
+:: Bloco PowerShell Calculador com Cores ANSI
+powershell -command "$antes = [int64]%espaco_antes%; $depois = (Get-Volume -DriveLetter C).SizeRemaining; $diff = $depois - $antes; if ($diff -le 0) { Write-Host 'Nenhum espaço significativo foi liberado desta vez.' -ForegroundColor Yellow } else { if ($diff -gt 1GB) { $total = '{0:N2} GB' -f ($diff / 1GB) } else { $total = '{0:N2} MB' -f ($diff / 1MB) }; Write-Host '>>> ESPAÇO TOTAL LIBERADO NO DISCO C: ' -NoNewline -ForegroundColor Green; Write-Host $total -ForegroundColor Cyan; }"
 
 echo.
 pause
