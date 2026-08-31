@@ -1,10 +1,8 @@
 # win-cleaner 🧹
 
-[![Windows](https://shields.io)](https://microsoft.com)
-[![Language](https://shields.io)](https://microsoft.com)
-[![License](https://shields.io)](https://opensource.org)
+> 🖥️ **Plataforma:** Windows 10 & 11 | ⚙️ **Tecnologia:** Windows Batch (`.bat`) | ⚖️ **Licença:** MIT (Código Aberto)
 
-Script automatizado em lote (`.bat`) projetado para realizar uma limpeza profunda no sistema, eliminação de caches redundantes e otimização de espaço em disco no Windows 10 e 11.
+Script automatizado projetado para realizar uma limpeza profunda no sistema, eliminação de caches redundantes e otimização de espaço em disco de forma rápida e segura.
 
 ---
 
