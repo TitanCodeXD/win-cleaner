@@ -67,10 +67,10 @@ echo.
 :: ---------------------------------------------------
 :: ETAPA 2
 :: ---------------------------------------------------
-echo %CYAN%Etapa 2 - Cache de apps (Spotify/Node.js)%RESET%
+echo %CYAN%Etapa 2 - Cache de apps (Spotify/Discord/Navegador/Node.js)%RESET%
 echo %YELLOW%[ WAIT ]%RESET% Limpando cache de aplicativos - Spotify/Node.js...
 
-:: Spotify Oficial
+::: [Spotify Oficial]
 if exist "%LocalAppData%\Spotify\Data" (
     rmdir /s /q "%LocalAppData%\Spotify\Data" >nul 2>&1
     mkdir "%LocalAppData%\Spotify\Data" >nul 2>&1
@@ -79,7 +79,7 @@ if exist "%LocalAppData%\Spotify\Storage" (
     rmdir /s /q "%LocalAppData%\Spotify\Storage" >nul 2>&1
     mkdir "%LocalAppData%\Spotify\Storage" >nul 2>&1
 )
-:: Spotify Windows Store
+:: [Spotify Windows Store]
 for /d %%i in ("%LocalAppData%\Packages\SpotifyAB.SpotifyMusic_*") do (
     if exist "%%i\LocalState\Spotify\Data" (
         rmdir /s /q "%%i\LocalState\Spotify\Data" >nul 2>&1
@@ -90,7 +90,34 @@ for /d %%i in ("%LocalAppData%\Packages\SpotifyAB.SpotifyMusic_*") do (
         mkdir "%%i\LocalState\Spotify\Storage" >nul 2>&1
     )
 ) 2>nul
-:: Node Cache
+
+:: [Discord]
+if exist "%AppData%\Discord\Cache" (
+    del /q /f /s "%AppData%\Discord\Cache\*.*" >nul 2>&1
+)
+if exist "%AppData%\Discord\Code Cache" (
+    del /q /f /s "%AppData%\Discord\Code Cache\*.*" >nul 2>&1
+)
+
+:: [Discord versão PTB, é um discord de versão de testes publicos e etc. É o que eu uso, então acabei colocando]
+if exist "%AppData%discordptb\Cache" (
+    del /q /f /s "%AppData%\Discord\Cache\*.*" >nul 2>&1
+)
+if exist "%AppData%\discordptb\Code Cache" (
+    del /q /f /s "%AppData%\Discord\Code Cache\*.*" >nul 2>&1
+)
+
+:: [Google Chrome que muitos usam, particularmente não uso, mas coloquei porque é comum]
+if exist "%LocalAppData%\Google\Chrome\User Data\Default\Cache" (
+    del /q /f /s "%LocalAppData%\Google\Chrome\User Data\Default\Cache\*.*" >nul 2>&1
+)
+
+:: [Opera GX outro que muitos usam]
+if exist "%LocalAppData%\Opera Software\Opera GX Stable\Cache" (
+    del /q /f /s "%LocalAppData%\Opera Software\Opera GX Stable\Cache\*.*" >nul 2>&1
+)
+
+:: [Node Cache / npm]
 if exist "%AppData%\npm-cache" (
     del /q /f /s "%AppData%\npm-cache\*.*" >nul 2>&1
     rmdir /s /q "%AppData%\npm-cache" >nul 2>&1
