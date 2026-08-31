@@ -22,7 +22,7 @@ O script opera de forma totalmente silenciosa (ocultando logs desnecessários) e
 | Etapa | Alvo da Limpeza | O que é removido? |
 | :---: | :--- | :--- |
 | **1** | **Arquivos Temporários** | Conteúdo das pastas `%temp%`, `C:\Windows\Temp` e `C:\Temp`. |
-| **2** | **Cache de Aplicativos** | Resíduos pesados do **Spotify** *(Data/Storage)* e do **Node.js** *(npm-cache)*. |
+| **2** | **Cache de Aplicativos** | Resíduos pesados do **Discord / Discord PTB**, navegadores (**Google Chrome** e **Opera GX**), **Spotify** *(Data/Storage)* e do **Node.js** *(npm-cache)*. |
 | **3** | **Rede & Otimização** | Flush completo de **DNS** e remoção de arquivos de **Prefetch** e `.log` antigos. |
 | **4** | **Lixeira** | Esvaziamento forçado da lixeira de todos os discos rígidos conectados. |
 | **5** | **Windows Update** | Limpeza de downloads antigos acumulados na pasta `SoftwareDistribution`. |
