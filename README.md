@@ -1,4 +1,7 @@
 # win-cleaner 🧹
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Windows](https://shields.io/badge/Windowns-blue.svg)](https://microsoft.com)
+[![Language](https://shields.io/badge/Batchfile-yellow.svg)](https://microsoft.com)
 
 > 🖥️ **Plataforma:** Windows 10 & 11 | ⚙️ **Tecnologia:** Windows Batch (`.bat`) | ⚖️ **Licença:** MIT (Código Aberto)
 
@@ -6,7 +9,7 @@ Script automatizado projetado para realizar uma limpeza profunda no sistema, eli
 
 _Conforme o tempo irei adicionando mais pastas de cache, arquivos temporários de apps e etc. Buscando otimização rápida e também um ganho de espaço em disco_
 
-## _Recomendação: Usar o agendador do windowns para rodar esse script automaticamente a cada semana, ou outro periodo de tempo, isso é livre para o usuário escolher_
+#### _Recomendação: Usar o agendador do windowns para rodar esse script automaticamente a cada semana, ou outro periodo de tempo, isso é livre para o usuário escolher_
 
 ## 🚀 Como Usar
 
